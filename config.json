@@ -1,6 +1,8 @@
 {
-  "db_name": "DB_NAME",
-  "bot_token": "BOT_TOKEN",
-  "db_host": "DB_HOST",
-  "db_password": "DB_PASSWORD"
+  "BOT_TOKEN": "BOT_TOKEN",
+  "BOT_PREFIX": "BOT_PREFIX",
+  "DB_NAME": "DB_NAME",
+  "DB_HOST": "DB_HOST",
+  "DB_USER": "DB_USER",
+  "DB_PASSWORD": "DB_PASSWORD"
 }

@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 
 public class Launcher {
 
@@ -16,7 +17,7 @@ public class Launcher {
             JSONObject config = new JSONObject(FileUtils.readFileToString(configFile, Charset.defaultCharset()));
 
             Bot discordCityBot = new Bot(config, "Build your city!");
-        } catch(IOException | LoginException initializationException) {
+        } catch(IOException | LoginException | SQLException | ClassNotFoundException initializationException) {
             initializationException.printStackTrace();
         }
     }
