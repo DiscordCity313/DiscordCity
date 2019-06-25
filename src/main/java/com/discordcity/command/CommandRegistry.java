@@ -5,6 +5,7 @@ import com.discordcity.command.impl.CommandPing;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.discordcity.command.impl.CommandViewCity;
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
 
@@ -18,6 +19,7 @@ public class CommandRegistry {
 
     private void registerCommands() {
         this.registerCommand(new CommandPing());
+        this.registerCommand(new CommandViewCity());
     }
 
     private void registerCommand(Command command) {

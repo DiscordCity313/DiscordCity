@@ -11,6 +11,8 @@ public abstract class Command {
 
     private String description;
 
+    private final String ERROR_MESSAGE = ("Please use the help command for assistance");
+
     public Command(String[] identifiers, String[] arguments, String description) {
         this.identifiers = identifiers;
         this.arguments = arguments;
@@ -33,6 +35,10 @@ public abstract class Command {
 
     public void reply(Message message, String response) {
         message.getTextChannel().sendMessage(response).queue();
+    }
+
+    public void replyError(Message message, String response) {
+        message.getTextChannel().sendMessage(response + "\n" + this.ERROR_MESSAGE).queue();
     }
 
     public boolean identifierMatches(String identifier) {
