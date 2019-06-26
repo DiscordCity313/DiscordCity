@@ -5,6 +5,7 @@ import com.discordcity.command.impl.CommandPing;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.discordcity.command.impl.CommandPurchaseTile;
 import com.discordcity.command.impl.CommandViewCity;
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
@@ -13,13 +14,18 @@ public class CommandRegistry {
 
     private List<Command> registeredCommands = new ArrayList<Command>();
 
-    public CommandRegistry() {
-        this.registerCommands();
+    public CommandRegistry(String prefix) {
+        this.registerCommands(prefix);
     }
 
-    private void registerCommands() {
+    private void registerCommands(String prefix) {
         this.registerCommand(new CommandPing());
         this.registerCommand(new CommandViewCity());
+        this.registerCommand(new CommandPurchaseTile());
+
+        for(Command command : this.registeredCommands) {
+            command.setPrefix(prefix);
+        }
     }
 
     private void registerCommand(Command command) {
@@ -28,13 +34,14 @@ public class CommandRegistry {
 
     public void callMatchingCommandForQuery(String prefix, Message query, MySql database) {
         String queryContent = query.getContentRaw();
+        String unprefixedContent = queryContent.replaceFirst(prefix, "");
 
-        String[] queryWords = queryContent.replaceFirst(prefix, "").split(" ");
+        String[] queryWords = unprefixedContent.split(" ");
         String queryIdentifier = queryWords[0];
 
         for(Command possibleMatch : this.registeredCommands) {
             if(possibleMatch.identifierMatches(queryIdentifier)) {
-                String[] queryArguments = queryWords.toString().replaceFirst(queryIdentifier, "").split(" ");
+                String[] queryArguments = unprefixedContent.replaceFirst(queryIdentifier + " ", "").split(" ");
 
                 possibleMatch.use(query, queryArguments, database);
             }

@@ -4,16 +4,17 @@ import com.discordcity.city.City;
 import com.discordcity.city.CityBuilder;
 import com.discordcity.city.CityCache;
 import com.discordcity.city.tile.CityTileType;
+import com.discordcity.command.CityCommand;
 import com.discordcity.command.Command;
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
 
 import java.sql.SQLException;
 
-public class CommandViewCity extends Command {
+public class CommandViewCity extends CityCommand {
 
     public CommandViewCity() {
-        super("city", "Displays your city");
+        super(new String [] {"city", "view", "viewcity", "mycity"}, "Displays your city");
     }
 
     @Override
@@ -28,24 +29,6 @@ public class CommandViewCity extends Command {
         }
     }
 
-    private City getCityForUser(String userId, MySql database) throws SQLException {
-        CityCache cityCache = CityCache.getInstance();
-
-        City userCity = null;
-
-        if(cityCache.isCityCached(userId)) {
-            userCity = cityCache.getCityFromCache(userId);
-        } else {
-            userCity = new CityBuilder(database).getCityForUser(userId);
-            cityCache.addCityToCache(userId, userCity);
-        }
-
-        int secondsSinceLastUpdate = 0;
-        userCity.updateCityForTime(secondsSinceLastUpdate);
-
-        return userCity;
-    }
-
     private String generateVisualCityDisplay(City city) {
         String visualCityDisplay = ("```\n ");
 
@@ -53,11 +36,11 @@ public class CommandViewCity extends Command {
         int tileGridHeight = city.getTileGridHeight();
 
         for(int columnNumberDisplay = 0; columnNumberDisplay < tileGridWidth; columnNumberDisplay++) {
-            visualCityDisplay += (columnNumberDisplay);
+            visualCityDisplay += (columnNumberDisplay + 1);
         }
 
         for(int row = 0; row < tileGridHeight; row++) {
-            visualCityDisplay += ("\n" + row);
+            visualCityDisplay += ("\n" + (row + 1));
 
             for(int column = 0; column < tileGridWidth; column++) {
                 int totalTileIndex = (row * tileGridWidth + column);
@@ -67,6 +50,9 @@ public class CommandViewCity extends Command {
                 visualCityDisplay += (tileType.SYMBOL);
             }
         }
+
+        visualCityDisplay += ("\n\nPopulation: " + city.getPopulation());
+        visualCityDisplay += ("\n\nFunds: $" + city.getFunds());
 
         visualCityDisplay += ("\n```");
 

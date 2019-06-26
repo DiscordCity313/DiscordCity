@@ -13,7 +13,7 @@ public class CommandListener extends ListenerAdapter {
     private MySql database;
 
     public CommandListener(String prefix, MySql database) {
-        this.commandRegistry = new CommandRegistry();
+        this.commandRegistry = new CommandRegistry(prefix);
         this.prefix = prefix;
         this.database = database;
     }

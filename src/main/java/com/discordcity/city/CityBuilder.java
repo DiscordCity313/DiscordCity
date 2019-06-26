@@ -83,7 +83,7 @@ public class CityBuilder {
         return cityExistsQuery.executeQuery().next();
     }
 
-    private String tilesToString(CityTileType[] tiles) {
+    public String tilesToString(CityTileType[] tiles) {
         String tileData = ("");
 
         for(CityTileType cityTileType : tiles) {

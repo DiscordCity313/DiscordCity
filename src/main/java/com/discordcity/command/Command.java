@@ -13,6 +13,8 @@ public abstract class Command {
 
     private final String ERROR_MESSAGE = ("Please use the help command for assistance");
 
+    private String prefix;
+
     public Command(String[] identifiers, String[] arguments, String description) {
         this.identifiers = identifiers;
         this.arguments = arguments;
@@ -50,4 +52,13 @@ public abstract class Command {
 
         return false;
     }
+
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
 }
