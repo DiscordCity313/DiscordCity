@@ -29,8 +29,8 @@ public abstract class CityCommand extends Command {
             cityCache.addCityToCache(userId, userCity);
         }
 
-        int secondsSinceLastUpdate = 0;
-        userCity.updateCityForTime(secondsSinceLastUpdate);
+        int secondsSinceLastUpdate = userCity.getSecondsSinceLastUpdate(database);
+        userCity.updateCityForTime(secondsSinceLastUpdate, database);
 
         return userCity;
     }

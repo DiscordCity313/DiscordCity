@@ -22,14 +22,14 @@ public class CommandViewCity extends CityCommand {
         try {
             String userId = message.getAuthor().getId();
 
-            this.reply(message, this.generateVisualCityDisplay(this.getCityForUser(userId, database)));
+            this.reply(message, this.generateVisualCityDisplay(this.getCityForUser(userId, database), database));
         } catch(SQLException sqlException) {
             this.replyError(message, "There was an issue retrieving your city information");
             sqlException.printStackTrace();
         }
     }
 
-    private String generateVisualCityDisplay(City city) {
+    private String generateVisualCityDisplay(City city, MySql database) throws SQLException {
         String visualCityDisplay = ("```\n ");
 
         int tileGridWidth = city.getTileGridWidth();
@@ -53,6 +53,7 @@ public class CommandViewCity extends CityCommand {
 
         visualCityDisplay += ("\n\nPopulation: " + city.getPopulation());
         visualCityDisplay += ("\n\nFunds: $" + city.getFunds());
+        visualCityDisplay += ("\n\nDensity: " + city.getDensity() + "/" + city.getMaxDensity());
 
         visualCityDisplay += ("\n```");
 

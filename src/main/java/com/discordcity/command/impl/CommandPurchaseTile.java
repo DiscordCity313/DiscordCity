@@ -32,7 +32,7 @@ public class CommandPurchaseTile extends CityCommand {
                     userCity.setTile(column, row, purchasedTile, database);
                     userCity.modifyFunds(-price, database);
 
-                    this.reply(message, "You've purchased 1 **" + purchasedTile.name() + "** for your city at column " + column + " row " + row + "! Type **" + this.getPrefix() + "city** to view your city");
+                    this.reply(message, "You've purchased 1 **" + purchasedTile.name() + "** for your city at column " + (column + 1) + " row " + (row + 1) + "! Type **" + this.getPrefix() + "city** to view your city");
                 } else {
                     this.reply(message, "Insufficient funds! You currently have $" + userCity.getFunds() + ", while that tile costs $" + price + ". Your city will generate funds over time: Check on your city again soon!");
                 }

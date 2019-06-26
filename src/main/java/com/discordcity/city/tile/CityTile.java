@@ -1,9 +1,9 @@
 package com.discordcity.city.tile;
 
-public class CityTile {
+import com.discordcity.city.City;
 
-    public CityTile() {
+public abstract class CityTile {
 
-    }
+    public abstract void updateForTime(int secondsSinceLastUpdate, City parentCity);
 
 }

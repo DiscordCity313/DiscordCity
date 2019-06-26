@@ -1,11 +1,14 @@
 package com.discordcity.city.tile;
 
+import com.discordcity.city.tile.impl.CityTileGround;
+import com.discordcity.city.tile.impl.CityTileHouse;
+import com.discordcity.city.tile.impl.CityTileIndustry;
 import org.apache.commons.lang3.EnumUtils;
 
 public enum CityTileType {
 
-    Ground(new CityTile(), '#', 0), House(new CityTile(), 'H', 15),
-    Industry(new CityTile(), 'I', 25);
+    Ground(new CityTileGround(), '#', 0), House(new CityTileHouse(), 'H', 15),
+    Industry(new CityTileIndustry(), 'I', 25);
 
     CityTileType(CityTile cityTile, char symbol, int price) {
         this.CITY_TILE = cityTile;

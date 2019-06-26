@@ -3,6 +3,7 @@ package com.discordcity.city;
 import com.discordcity.city.tile.CityTile;
 import com.discordcity.city.tile.CityTileType;
 import com.discordcity.database.MySql;
+import com.discordcity.util.TimeUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,8 @@ import java.util.Arrays;
 public class CityBuilder {
 
     private final int INITIAL_FUNDS = 500;
+
+    private final int INITAL_MAX_DENSITY = 20;
 
     private final int TILE_GRID_WIDTH = 9;
     private final int TILE_GRID_HEIGHT = 9;
@@ -46,20 +49,23 @@ public class CityBuilder {
         cityPropertiesResult.next();
         int cityPopulation = cityPropertiesResult.getInt("population");
         int cityFunds = cityPropertiesResult.getInt("funds");
+        int maxDensity = cityPropertiesResult.getInt("maxDensity");
 
         cityTilesResult.next();
         CityTileType[] cityTilemap = this.generateTilesFromString(cityTilesResult.getString("tiles"));
 
-        City builtCity = new City(cityPopulation, cityFunds, cityTilemap, this.TILE_GRID_WIDTH, this.TILE_GRID_HEIGHT, ownerUserId);
+        City builtCity = new City(cityPopulation, cityFunds, maxDensity, cityTilemap, this.TILE_GRID_WIDTH, this.TILE_GRID_HEIGHT, ownerUserId);
 
         return builtCity;
     }
 
     public City buildNewCity(String ownerUserId) throws SQLException {
-        PreparedStatement createCityProperties = this.database.getStatement("INSERT INTO CityProperties (ownerUserId, population, funds) VALUES (?, ?, ?)");
+        PreparedStatement createCityProperties = this.database.getStatement("INSERT INTO CityProperties (ownerUserId, population, funds, maxDensity, lastUpdated) VALUES (?, ?, ?, ?, ?)");
         createCityProperties.setString(1, ownerUserId);
         createCityProperties.setInt(2, 0);
         createCityProperties.setInt(3, this.INITIAL_FUNDS);
+        createCityProperties.setInt(4, this.INITAL_MAX_DENSITY);
+        createCityProperties.setTimestamp(5, TimeUtil.getInstance().getCurrentTime());
 
         createCityProperties.execute();
 
@@ -71,7 +77,7 @@ public class CityBuilder {
 
         createCityTiles.execute();
 
-        City builtCity = new City(0, this.INITIAL_FUNDS, newCityTilemap, this.TILE_GRID_WIDTH, this.TILE_GRID_HEIGHT, ownerUserId);
+        City builtCity = new City(0, this.INITIAL_FUNDS, this.INITAL_MAX_DENSITY, newCityTilemap, this.TILE_GRID_WIDTH, this.TILE_GRID_HEIGHT, ownerUserId);
 
         return builtCity;
     }
