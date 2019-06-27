@@ -25,7 +25,7 @@ public abstract class CityCommand extends Command {
         if(cityCache.isCityCached(userId)) {
             userCity = cityCache.getCityFromCache(userId);
         } else {
-            userCity = new CityBuilder(database).getCityForUser(userId);
+            userCity = new CityBuilder().getCityForUser(userId, database);
             cityCache.addCityToCache(userId, userCity);
         }
 

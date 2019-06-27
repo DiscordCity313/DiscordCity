@@ -2,6 +2,7 @@ package com.discordcity.command;
 
 import com.discordcity.command.impl.CommandPing;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +15,11 @@ public class CommandRegistry {
 
     private List<Command> registeredCommands = new ArrayList<Command>();
 
-    public CommandRegistry(String prefix) {
+    public CommandRegistry(String prefix) throws IOException {
         this.registerCommands(prefix);
     }
 
-    private void registerCommands(String prefix) {
+    private void registerCommands(String prefix) throws IOException {
         this.registerCommand(new CommandPing());
         this.registerCommand(new CommandViewCity());
         this.registerCommand(new CommandPurchaseTile());

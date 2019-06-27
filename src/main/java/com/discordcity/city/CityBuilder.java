@@ -12,36 +12,35 @@ import java.util.Arrays;
 
 public class CityBuilder {
 
+    private static final CityBuilder INSTANCE = new CityBuilder();
+
     private final int INITIAL_FUNDS = 500;
 
     private final int INITAL_MAX_DENSITY = 20;
 
-    private final int TILE_GRID_WIDTH = 9;
-    private final int TILE_GRID_HEIGHT = 9;
+    public final int TILE_GRID_WIDTH = 9;
+    public final int TILE_GRID_HEIGHT = 9;
+
+    public final int TILE_WIDTH = 16;
+    public final int TILE_HEIGHT = 16;
 
     private final int TILE_COUNT = this.TILE_GRID_WIDTH * this.TILE_GRID_HEIGHT;
 
-    private MySql database;
-
-    public CityBuilder(MySql database) {
-        this.database = database;
-    }
-
-    public City getCityForUser(String ownerUserId) throws SQLException {
-        if(this.cityExists(ownerUserId)) {
-            return this.buildExistingCity(ownerUserId);
+    public City getCityForUser(String ownerUserId, MySql database) throws SQLException {
+        if(this.cityExists(ownerUserId, database)) {
+            return this.buildExistingCity(ownerUserId, database);
         } else {
-            return this.buildNewCity(ownerUserId);
+            return this.buildNewCity(ownerUserId, database);
         }
     }
 
-    public City buildExistingCity(String ownerUserId) throws SQLException {
-        PreparedStatement cityPropertiesQuery = this.database.getStatement("SELECT * FROM CityProperties WHERE ownerUserId = ?");
+    public City buildExistingCity(String ownerUserId, MySql database) throws SQLException {
+        PreparedStatement cityPropertiesQuery = database.getStatement("SELECT * FROM CityProperties WHERE ownerUserId = ?");
         cityPropertiesQuery.setString(1, ownerUserId);
 
         ResultSet cityPropertiesResult = cityPropertiesQuery.executeQuery();
 
-        PreparedStatement cityTilesQuery = this.database.getStatement("SELECT * FROM CityTiles WHERE ownerUserId = ?");
+        PreparedStatement cityTilesQuery = database.getStatement("SELECT * FROM CityTiles WHERE ownerUserId = ?");
         cityTilesQuery.setString(1, ownerUserId);
 
         ResultSet cityTilesResult = cityTilesQuery.executeQuery();
@@ -59,8 +58,8 @@ public class CityBuilder {
         return builtCity;
     }
 
-    public City buildNewCity(String ownerUserId) throws SQLException {
-        PreparedStatement createCityProperties = this.database.getStatement("INSERT INTO CityProperties (ownerUserId, population, funds, maxDensity, lastUpdated) VALUES (?, ?, ?, ?, ?)");
+    public City buildNewCity(String ownerUserId, MySql database) throws SQLException {
+        PreparedStatement createCityProperties = database.getStatement("INSERT INTO CityProperties (ownerUserId, population, funds, maxDensity, lastUpdated) VALUES (?, ?, ?, ?, ?)");
         createCityProperties.setString(1, ownerUserId);
         createCityProperties.setInt(2, 0);
         createCityProperties.setInt(3, this.INITIAL_FUNDS);
@@ -69,7 +68,7 @@ public class CityBuilder {
 
         createCityProperties.execute();
 
-        PreparedStatement createCityTiles = this.database.getStatement("INSERT INTO CityTiles (ownerUserId, tiles) VALUES (?, ?)");
+        PreparedStatement createCityTiles = database.getStatement("INSERT INTO CityTiles (ownerUserId, tiles) VALUES (?, ?)");
         createCityTiles.setString(1, ownerUserId);
 
         CityTileType[] newCityTilemap = this.generateBlankTilemap();
@@ -82,8 +81,8 @@ public class CityBuilder {
         return builtCity;
     }
 
-    public boolean cityExists(String ownerUserId) throws SQLException {
-        PreparedStatement cityExistsQuery = this.database.getStatement("SELECT ownerUserId FROM CityProperties WHERE ownerUserId = ?");
+    public boolean cityExists(String ownerUserId, MySql database) throws SQLException {
+        PreparedStatement cityExistsQuery = database.getStatement("SELECT ownerUserId FROM CityProperties WHERE ownerUserId = ?");
         cityExistsQuery.setString(1, ownerUserId);
 
         return cityExistsQuery.executeQuery().next();
@@ -121,6 +120,10 @@ public class CityBuilder {
         }
 
         return tiles;
+    }
+
+    public static CityBuilder getInstance() {
+        return INSTANCE;
     }
 
 }

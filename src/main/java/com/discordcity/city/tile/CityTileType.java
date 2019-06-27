@@ -14,11 +14,13 @@ public enum CityTileType {
         this.CITY_TILE = cityTile;
         this.SYMBOL = symbol;
         this.PRICE = price;
+        this.SPRITE_NAME = (this.name().toLowerCase() + ".png");
     }
 
     public final CityTile CITY_TILE;
     public final char SYMBOL;
     public final int PRICE;
+    public final String SPRITE_NAME;
 
     public int getId() {
         return this.ordinal();

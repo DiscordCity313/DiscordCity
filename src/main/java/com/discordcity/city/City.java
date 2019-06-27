@@ -67,7 +67,7 @@ public class City {
     }
 
     private void writeTilemapToDatabase(MySql database) throws SQLException {
-        String tilemapData = new CityBuilder(database).tilesToString(this.tiles);
+        String tilemapData = new CityBuilder().tilesToString(this.tiles);
 
         PreparedStatement updateTilemap = database.getStatement("UPDATE CityTiles SET tiles = ? WHERE ownerUserId = ?");
         updateTilemap.setString(1, tilemapData);

@@ -8,6 +8,7 @@ import net.dv8tion.jda.core.entities.Game;
 import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Bot {
@@ -17,10 +18,14 @@ public class Bot {
     private MySql database;
 
     public Bot(JSONObject config, String game) throws LoginException, SQLException, ClassNotFoundException {
-        this.jda = new JDABuilder(config.getString("BOT_TOKEN")).setGame(Game.of(Game.GameType.DEFAULT, game)).build();
+        try {
+            this.jda = new JDABuilder(config.getString("BOT_TOKEN")).setGame(Game.of(Game.GameType.DEFAULT, game)).build();
 
-        this.setupDatabase(config);
-        this.setupCommandListener(config);
+            this.setupDatabase(config);
+            this.setupCommandListener(config);
+        } catch(IOException assetLoadException) {
+            assetLoadException.printStackTrace();
+        }
     }
 
     private void setupDatabase(JSONObject config) throws SQLException, ClassNotFoundException {
@@ -35,7 +40,7 @@ public class Bot {
         this.database = new MySql(databaseDriver, databaseConnection);
     }
 
-    private void setupCommandListener(JSONObject config) {
+    private void setupCommandListener(JSONObject config) throws IOException {
         String prefix = config.getString("BOT_PREFIX");
 
         this.jda.addEventListener(new CommandListener(prefix, this.database));

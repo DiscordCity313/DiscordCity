@@ -7,15 +7,43 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+task fullBuild(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.discordcity.Launcher'
+    }
+
+    baseName = project.name + '-build'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task copyConfig(type: Copy) {
+    from 'config.json'
+    into 'build/libs'
+    include '*.json'
+}
+
+task copyAssets(type: Copy) {
+    from 'assets'
+    into 'build/libs/assets'
+    include "*.png"
+}
+
 repositories {
     mavenCentral()
     jcenter()
 }
 
 dependencies {
-    compile 'net.dv8tion:JDA:3.8.3_463'
+    compile ('net.dv8tion:JDA:3.8.3_463') {
+        exclude module: 'opus-java'
+    }
+
     compile group: 'org.json', name: 'json', version: '20180813'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.21'
 }
+
+fullBuild.dependsOn copyConfig
+fullBuild.dependsOn copyAssets

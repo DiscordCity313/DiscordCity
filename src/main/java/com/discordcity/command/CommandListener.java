@@ -4,6 +4,8 @@ import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import java.io.IOException;
+
 public class CommandListener extends ListenerAdapter {
 
     private CommandRegistry commandRegistry;
@@ -12,7 +14,7 @@ public class CommandListener extends ListenerAdapter {
 
     private MySql database;
 
-    public CommandListener(String prefix, MySql database) {
+    public CommandListener(String prefix, MySql database) throws IOException {
         this.commandRegistry = new CommandRegistry(prefix);
         this.prefix = prefix;
         this.database = database;
