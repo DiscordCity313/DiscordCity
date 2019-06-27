@@ -7,8 +7,8 @@ import org.apache.commons.lang3.EnumUtils;
 
 public enum CityTileType {
 
-    Ground(new CityTileGround(), '#', 0), House(new CityTileHouse(), 'H', 15),
-    Industry(new CityTileIndustry(), 'I', 25);
+    Ground(new CityTileGround(), '#', 0), House(new CityTileHouse(), 'H', 150),
+    Industry(new CityTileIndustry(), 'I', 250);
 
     CityTileType(CityTile cityTile, char symbol, int price) {
         this.CITY_TILE = cityTile;

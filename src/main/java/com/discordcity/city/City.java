@@ -54,10 +54,6 @@ public class City {
         }
     }
 
-    private int getMaxPopulation() {
-        return this.maxDensity * this.tileCountForType(CityTileType.House);
-    }
-
     public void setTile(int column, int row, CityTileType cityTileType, MySql database) throws SQLException {
         int tileIndex = (row * this.tileGridWidth + column);
 
@@ -66,7 +62,7 @@ public class City {
         this.writeTilemapToDatabase(database);
     }
 
-    public void modifyFunds(int modification, MySql database) throws SQLException {
+    public void modifyFunds(int modification) {
         this.funds += modification;
     }
 
@@ -186,6 +182,14 @@ public class City {
 
     public int getMaxDensity() {
         return this.maxDensity;
+    }
+
+    public int getMaxPopulation() {
+        return this.maxDensity * this.tileCountForType(CityTileType.House);
+    }
+
+    public String getOwnerUserId() {
+        return this.ownerUserId;
     }
 
 }

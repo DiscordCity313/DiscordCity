@@ -7,7 +7,10 @@ import com.discordcity.city.tile.CityTileType;
 import com.discordcity.command.CityCommand;
 import com.discordcity.command.Command;
 import com.discordcity.database.MySql;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.User;
 
 import java.sql.SQLException;
 
@@ -22,15 +25,18 @@ public class CommandViewCity extends CityCommand {
         try {
             String userId = message.getAuthor().getId();
 
-            this.reply(message, this.generateVisualCityDisplay(this.getCityForUser(userId, database), database));
+            this.reply(message, this.generateVisualCityDisplay(this.getCityForUser(userId, database), database, message.getJDA()));
         } catch(SQLException sqlException) {
             this.replyError(message, "There was an issue retrieving your city information");
             sqlException.printStackTrace();
         }
     }
 
-    private String generateVisualCityDisplay(City city, MySql database) throws SQLException {
-        String visualCityDisplay = ("```\n ");
+    private String generateVisualCityDisplay(City city, MySql database, JDA jda) throws SQLException {
+        String visualCityDisplay = ("```\n");
+
+        String ownerName = jda.getUserById(city.getOwnerUserId()).getName();
+        visualCityDisplay += ("-\n" + ownerName + "'s City\n-\n\n");
 
         int tileGridWidth = city.getTileGridWidth();
         int tileGridHeight = city.getTileGridHeight();
@@ -51,9 +57,14 @@ public class CommandViewCity extends CityCommand {
             }
         }
 
-        visualCityDisplay += ("\n\nPopulation: " + city.getPopulation());
         visualCityDisplay += ("\n\nFunds: $" + city.getFunds());
+        visualCityDisplay += ("\n\nPopulation: " + city.getPopulation() + "/" + city.getMaxPopulation());
         visualCityDisplay += ("\n\nDensity: " + city.getDensity() + "/" + city.getMaxDensity());
+        visualCityDisplay += ("\n\n\n------------");
+        visualCityDisplay += ("\nCity Commands");
+        visualCityDisplay += ("\n------------");
+        visualCityDisplay += ("\n\n" + this.getPrefix() + "buy house 2 1\n(Buys a house at column 2, row 1)");
+        visualCityDisplay += ("\n\n" + this.getPrefix() + "city\n(Displays and updates your city)");
 
         visualCityDisplay += ("\n```");
 
