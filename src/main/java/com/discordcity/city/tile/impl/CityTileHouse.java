@@ -1,6 +1,7 @@
 package com.discordcity.city.tile.impl;
 
 import com.discordcity.city.City;
+import com.discordcity.city.CityBuilder;
 import com.discordcity.city.tile.CityTile;
 
 public class CityTileHouse extends CityTile {
@@ -11,13 +12,15 @@ public class CityTileHouse extends CityTile {
 
     @Override
     public void updateForTime(int secondsSinceLastUpdate, City parentCity) {
-        int populationIncreaseForTime = secondsSinceLastUpdate / this.secondsToPopulationRatio;
+        if(parentCity.getUnemployment() < CityBuilder.getInstance().DAMAGING_UNEMPLOYMENT_RATE) {
+            int populationIncreaseForTime = secondsSinceLastUpdate / this.secondsToPopulationRatio;
 
-        parentCity.modifyPopulation(populationIncreaseForTime);
+            parentCity.modifyPopulation(populationIncreaseForTime);
 
-        int incomeIncreaseForTime = secondsSinceLastUpdate / this.secondsToIncomeRatio;
+            int incomeIncreaseForTime = secondsSinceLastUpdate / this.secondsToIncomeRatio;
 
-        parentCity.modifyFunds(incomeIncreaseForTime);
+            parentCity.modifyFunds(incomeIncreaseForTime);
+        }
     }
 
 }

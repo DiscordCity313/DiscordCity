@@ -26,6 +26,8 @@ public class CityBuilder {
 
     private final int TILE_COUNT = this.TILE_GRID_WIDTH * this.TILE_GRID_HEIGHT;
 
+    public final int DAMAGING_UNEMPLOYMENT_RATE = 30;
+
     public City getCityForUser(String ownerUserId, MySql database) throws SQLException {
         if(this.cityExists(ownerUserId, database)) {
             return this.buildExistingCity(ownerUserId, database);

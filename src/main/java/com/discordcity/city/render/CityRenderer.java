@@ -26,17 +26,23 @@ public class CityRenderer {
 
     private HashMap<CityTileType, Image> spriteCache = new HashMap<CityTileType, Image>();
 
+    private Image uiSprite;
+
     public CityRenderer(int mapGridWidth, int mapGridHeight, int tileWidth, int tileHeight) throws IOException {
-        this.displayWidth = mapGridWidth * tileWidth;
-        this.displayHeight = mapGridHeight * tileHeight;
+        this.displayWidth = 240;
+        this.displayHeight = 240;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
 
         this.setupSpriteCache();
+
+        this.uiSprite = ImageIO.read(new File(this.CACHE_PATH + "/background.png"));
     }
 
     public File render(City city) throws IOException {
         this.setupDisplay();
+
+        this.renderStats(city);
 
         this.renderTilemap(city);
 
@@ -61,17 +67,43 @@ public class CityRenderer {
         this.graphics = this.displayImage.createGraphics();
     }
 
+    private void renderStats(City city) {
+        this.graphics.drawImage(this.uiSprite, 0, 0, null);
+
+        int offsetX = this.tileWidth * 3 + this.tileWidth / 2;
+
+        this.graphics.drawString("Population: " + city.getPopulation() + "/" + city.getMaxPopulation(), offsetX, 16);
+        this.graphics.drawString("Density: " + city.getDensity() + "/" + city.getMaxDensity(), offsetX, 32);
+        this.graphics.drawString("Funds: $" + city.getFunds(), offsetX, 48);
+        this.graphics.drawString("Unemployment: " + city.getUnemployment()  + "%", offsetX, 64);
+    }
+
     private void renderTilemap(City city) {
+        int offsetX = this.uiSprite.getHeight(null) / 2 - (city.getTileGridWidth() * this.tileWidth / 2);
+        int offsetY = this.uiSprite.getHeight(null) / 3;
+
         for(int row = 0; row < city.getTileGridHeight(); row++) {
+            int renderRow = row + 1;
+            int rowDisplayY = (renderRow * this.tileHeight) + offsetY - this.tileHeight / 4;
+
+            this.graphics.drawString("" + (row + 1), offsetX - this.tileWidth / 2, rowDisplayY);
+
             for(int column = 0; column < city.getTileGridWidth(); column++) {
+                int columnDisplayX = (column * this.tileWidth) + offsetX + tileWidth / 4;
+
+                this.graphics.drawString("" + (column + 1), columnDisplayX, offsetY);
+
                 int tileIndex = (row * city.getTileGridWidth() + column);
 
                 Image tileSprite = this.spriteCache.get(city.getTileForIndex(tileIndex));
 
                 int tilePositionX = column * this.tileWidth;
-                int tilePosiitonY = row * this.tileHeight;
+                int tilePositionY = row * this.tileHeight;
 
-                this.graphics.drawImage(tileSprite, tilePositionX, tilePosiitonY, null);
+                tilePositionX += offsetX;
+                tilePositionY += offsetY;
+
+                this.graphics.drawImage(tileSprite, tilePositionX, tilePositionY, null);
             }
         }
     }

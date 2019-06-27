@@ -17,6 +17,8 @@ public class City {
 
     private int maxDensity;
 
+    private int unemployment;
+
     private CityTileType[] tiles;
     private int tileGridWidth;
     private int tileGridHeight;
@@ -33,12 +35,35 @@ public class City {
         this.ownerUserId = ownerUserId;
     }
 
+    public void updateUnemployment() {
+        int unemploymentPoints = 0;
+
+        int industryRequiredPerHouse = 3;
+
+        int houses = this.tileCountForType(CityTileType.House);
+        int industry = this.tileCountForType(CityTileType.Industry);
+
+        unemploymentPoints += houses;
+        unemploymentPoints -= industry * industryRequiredPerHouse;
+
+        if(unemploymentPoints <= 0) {
+            this.unemployment = 0;
+        } else {
+            this.unemployment = unemploymentPoints * 100 / houses;
+        }
+
+        if(this.unemployment > 100) {
+            this.unemployment = 100;
+        }
+    }
+
     public void updateCityForTime(int secondsSinceLastUpdate, MySql database) throws SQLException {
         System.out.println("Seconds since last update: " + secondsSinceLastUpdate);
         for(CityTileType cityTileType : this.tiles) {
             cityTileType.CITY_TILE.updateForTime(secondsSinceLastUpdate, this);
         }
 
+        this.updateUnemployment();
         this.updateDatabaseProperties(database);
     }
 
@@ -190,6 +215,10 @@ public class City {
 
     public String getOwnerUserId() {
         return this.ownerUserId;
+    }
+
+    public int getUnemployment() {
+        return this.unemployment;
     }
 
 }
