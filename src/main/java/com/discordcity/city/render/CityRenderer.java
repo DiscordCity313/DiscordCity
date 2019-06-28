@@ -75,10 +75,9 @@ public class CityRenderer {
 
         int offsetX = this.tileWidth * 3 + this.tileWidth / 2;
 
-        this.graphics.drawString("Population: " + city.getPopulation() + "/" + city.getMaxPopulation(), offsetX, 16);
-        this.graphics.drawString("Density: " + city.getDensity() + "/" + city.getMaxDensity(), offsetX, 32);
-        this.graphics.drawString("Funds: $" + city.getFunds(), offsetX, 48);
-        this.graphics.drawString("Unemployment: " + city.getUnemployment()  + "%", offsetX, 64);
+        this.graphics.drawString("Population: " + city.getPopulation() + "/" + city.getMaxPopulation(), offsetX, 22);
+        this.graphics.drawString("Funds: $" + city.getFunds(), offsetX, 38);
+        this.graphics.drawString("Unemployment: " + city.getUnemployment()  + "%", offsetX, 54);
     }
 
     private void renderTilemap(City city) {

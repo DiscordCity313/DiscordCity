@@ -11,16 +11,21 @@ public class CityTileHouse extends CityTile {
     private int secondsToIncomeRatio = 5;
 
     @Override
-    public void updateForTime(int secondsSinceLastUpdate, City parentCity) {
+    public boolean updateForTime(int secondsSinceLastUpdate, City parentCity) {
         if(parentCity.getUnemployment() < CityBuilder.getInstance().DAMAGING_UNEMPLOYMENT_RATE) {
-            int populationIncreaseForTime = secondsSinceLastUpdate / this.secondsToPopulationRatio;
+            int populationIncreaseForTime = this.getSecondsSinceLastValidTileUpdate() / this.secondsToPopulationRatio;
 
             parentCity.modifyPopulation(populationIncreaseForTime);
 
-            int incomeIncreaseForTime = secondsSinceLastUpdate / this.secondsToIncomeRatio;
+            int incomeIncreaseForTime = this.getSecondsSinceLastValidTileUpdate() / this.secondsToIncomeRatio;
 
             parentCity.modifyFunds(incomeIncreaseForTime);
+
+            boolean validTileUpdate = (populationIncreaseForTime > 0 && incomeIncreaseForTime > 0);
+            return validTileUpdate;
         }
+
+        return false;
     }
 
 }

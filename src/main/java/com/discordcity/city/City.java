@@ -60,7 +60,12 @@ public class City {
     public void updateCityForTime(int secondsSinceLastUpdate, MySql database) throws SQLException {
         System.out.println("Seconds since last update: " + secondsSinceLastUpdate);
         for(CityTileType cityTileType : this.tiles) {
-            cityTileType.CITY_TILE.updateForTime(secondsSinceLastUpdate, this);
+
+            boolean validTileUpdate = cityTileType.CITY_TILE.updateForTime(secondsSinceLastUpdate, this);
+
+            if(validTileUpdate) {
+                cityTileType.CITY_TILE.resetTileUpdateTime();
+            }
         }
 
         this.updateUnemployment();
