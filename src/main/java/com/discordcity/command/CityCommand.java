@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public abstract class CityCommand extends Command {
 
-    public CityCommand(String[] identifiers, String[] arguments, String description) {
+    public CityCommand(String[] identifiers, String arguments, String description) {
         super(identifiers, arguments, description);
     }
 

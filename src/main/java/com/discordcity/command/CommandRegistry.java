@@ -1,5 +1,6 @@
 package com.discordcity.command;
 
+import com.discordcity.command.impl.CommandHelp;
 import com.discordcity.command.impl.CommandPing;
 
 import java.io.IOException;
@@ -22,7 +23,8 @@ public class CommandRegistry {
     private void registerCommands(String prefix) throws IOException {
         this.registerCommand(new CommandPing());
         this.registerCommand(new CommandViewCity());
-        this.registerCommand(new CommandPurchaseTile());
+        this.registerCommand(new CommandPurchaseTile(prefix));
+        this.registerCommand(new CommandHelp(this));
 
         for(Command command : this.registeredCommands) {
             command.setPrefix(prefix);
@@ -48,6 +50,10 @@ public class CommandRegistry {
             }
         }
 
+    }
+
+    public List<Command> getRegisteredCommands() {
+        return this.registeredCommands;
     }
 
 }

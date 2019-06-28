@@ -8,6 +8,7 @@ public class CommandPing extends Command {
 
     public CommandPing() {
         super("ping", "Pings the bot");
+        this.setUnlisted(true);
     }
 
     @Override

@@ -17,8 +17,11 @@ public class CommandPurchaseTile extends CityCommand {
 
     private CityRenderer cityRenderer;
 
-    public CommandPurchaseTile() throws IOException {
-        super(new String[] {"buy", "purchase", "tile"}, "Buy and place a tile for your city");
+    public CommandPurchaseTile(String prefix) throws IOException {
+        super(new String[] {"buy", "purchase", "tile"}, "<building name> <column> <row> ", "Buy and place a building for your city");
+        this.setExampleUsage(prefix + "buy house 2 5 - (Place a house at column 2, row 5)");
+        this.setExampleUsage(this.getExampleUsage() + "\n" + prefix + "buy industry 3 7 - (Place industry at column 3, row 7)");
+
         CityBuilder cityBuilder = CityBuilder.getInstance();
 
         this.cityRenderer = new CityRenderer(cityBuilder.TILE_WIDTH, cityBuilder.TILE_HEIGHT);

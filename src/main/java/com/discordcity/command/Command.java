@@ -7,7 +7,7 @@ public abstract class Command {
 
     private String[] identifiers;
 
-    private String[] arguments;
+    private String arguments;
 
     private String description;
 
@@ -15,7 +15,11 @@ public abstract class Command {
 
     private String prefix;
 
-    public Command(String[] identifiers, String[] arguments, String description) {
+    private boolean unlisted;
+
+    private String exampleUsage;
+
+    public Command(String[] identifiers, String arguments, String description) {
         this.identifiers = identifiers;
         this.arguments = arguments;
         this.description = description;
@@ -23,13 +27,13 @@ public abstract class Command {
 
     public Command(String[] identifiers, String description) {
         this.identifiers = identifiers;
-        this.arguments = new String[] {};
+        this.arguments = ("");
         this.description = description;
     }
 
     public Command(String identifier, String description) {
         this.identifiers = new String[] {identifier};
-        this.arguments = new String[] {};
+        this.arguments = ("");
         this.description = description;
     }
 
@@ -59,6 +63,38 @@ public abstract class Command {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public String getPrimaryIdentifier() {
+        return this.identifiers[0];
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public boolean isUnlisted() {
+        return this.unlisted;
+    }
+
+    public void setUnlisted(boolean unlisted) {
+        this.unlisted = unlisted;
+    }
+
+    public String getArguments() {
+        return this.arguments;
+    }
+
+    public String getExampleUsage() {
+        return this.exampleUsage;
+    }
+
+    public void setExampleUsage(String exampleUsage) {
+        this.exampleUsage = exampleUsage;
+    }
+
+    public boolean hasExampleUsage() {
+        return this.getExampleUsage() != null;
     }
 
 }
