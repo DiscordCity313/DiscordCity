@@ -83,6 +83,20 @@ public class CityBuilder {
         return builtCity;
     }
 
+    public City resetCity(String ownerUserId, MySql database) throws SQLException {
+        PreparedStatement resetPropertiesStatement = database.getStatement("DELETE FROM CityProperties WHERE ownerUserId = ?");
+        resetPropertiesStatement.setString(1, ownerUserId);
+
+        resetPropertiesStatement.execute();
+
+        PreparedStatement resetTilesStatemet = database.getStatement("DELETE FROM CityTiles WHERE ownerUserId = ?");
+        resetTilesStatemet.setString(1, ownerUserId);
+
+        resetTilesStatemet.execute();
+
+        return this.buildNewCity(ownerUserId, database);
+    }
+
     public boolean cityExists(String ownerUserId, MySql database) throws SQLException {
         PreparedStatement cityExistsQuery = database.getStatement("SELECT ownerUserId FROM CityProperties WHERE ownerUserId = ?");
         cityExistsQuery.setString(1, ownerUserId);

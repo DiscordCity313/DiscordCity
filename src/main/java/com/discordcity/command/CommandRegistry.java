@@ -1,14 +1,11 @@
 package com.discordcity.command;
 
-import com.discordcity.command.impl.CommandHelp;
-import com.discordcity.command.impl.CommandPing;
+import com.discordcity.command.impl.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.discordcity.command.impl.CommandPurchaseTile;
-import com.discordcity.command.impl.CommandViewCity;
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
@@ -26,6 +23,7 @@ public class CommandRegistry {
         this.registerCommand(new CommandViewCity());
         this.registerCommand(new CommandPurchaseTile(prefix));
         this.registerCommand(new CommandHelp(this));
+        this.registerCommand(new CommandReset());
 
         for(Command command : this.registeredCommands) {
             command.setPrefix(prefix);
@@ -38,19 +36,21 @@ public class CommandRegistry {
 
     public void callMatchingCommandForQuery(String prefix, Message query, MySql database) {
         String queryContent = query.getContentRaw();
-        String unprefixedContent = queryContent.replaceFirst(prefix, "");
 
-        String[] queryWords = unprefixedContent.split(" ");
-        String queryIdentifier = queryWords[0];
+        if(queryContent.startsWith(prefix)) {
+            String unprefixedContent = queryContent.replaceFirst(prefix, "");
 
-        for(Command possibleMatch : this.registeredCommands) {
-            if(possibleMatch.identifierMatches(queryIdentifier)) {
-                String[] queryArguments = unprefixedContent.replaceFirst(queryIdentifier + " ", "").split(" ");
+            String[] queryWords = unprefixedContent.split(" ");
+            String queryIdentifier = queryWords[0];
 
-                possibleMatch.use(query, queryArguments, database);
+            for (Command possibleMatch : this.registeredCommands) {
+                if (possibleMatch.identifierMatches(queryIdentifier)) {
+                    String[] queryArguments = unprefixedContent.replaceFirst(queryIdentifier + " ", "").split(" ");
+
+                    possibleMatch.use(query, queryArguments, database);
+                }
             }
         }
-
     }
 
     public void useReaction(GenericGuildMessageReactionEvent event, MySql database) {

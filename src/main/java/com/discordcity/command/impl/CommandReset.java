@@ -1,19 +1,38 @@
 package com.discordcity.command.impl;
 
+import com.discordcity.city.City;
+import com.discordcity.city.CityBuilder;
+import com.discordcity.city.CityCache;
+import com.discordcity.command.CityCommand;
 import com.discordcity.command.Command;
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
 
-public class CommandPing extends Command {
+import java.io.IOException;
+import java.sql.SQLException;
 
-    public CommandPing() {
-        super("ping", "Pings the bot");
+public class CommandReset extends CityCommand {
+
+    public CommandReset() throws IOException {
+        super(new String[] {"reset"}, "Resets your city");
         this.setUnlisted(true);
     }
 
     @Override
     public void use(Message message, String[] arguments, MySql database) {
-        this.reply(message, "Pong!");
+        try {
+            if (arguments[0].equalsIgnoreCase("confirm")) {
+                City newCity = CityBuilder.getInstance().resetCity(message.getAuthor().getId(), database);
+
+                CityCache.getInstance().addCityToCache(message.getAuthor().getId(), newCity);
+
+                this.sendCityDisplayMessage("**City reset!**", message.getTextChannel(), message.getAuthor().getId(), database);
+            } else {
+                this.reply(message, "**You are about to reset your city!** Please type " + this.getPrefix() + "reset confirm to confirm");
+            }
+        } catch(SQLException cityBuildException) {
+            this.replyError(message, "Failed to create your city in the database");
+        }
     }
 
 }
