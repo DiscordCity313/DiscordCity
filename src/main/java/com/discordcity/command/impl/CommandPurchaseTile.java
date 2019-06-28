@@ -1,16 +1,27 @@
 package com.discordcity.command.impl;
 
 import com.discordcity.city.City;
+import com.discordcity.city.CityBuilder;
+import com.discordcity.city.render.CityRenderer;
 import com.discordcity.city.tile.CityTileType;
 import com.discordcity.command.CityCommand;
 import com.discordcity.database.MySql;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
+
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class CommandPurchaseTile extends CityCommand {
 
-    public CommandPurchaseTile() {
+    private CityRenderer cityRenderer;
+
+    public CommandPurchaseTile() throws IOException {
         super(new String[] {"buy", "purchase", "tile"}, "Buy and place a tile for your city");
+        CityBuilder cityBuilder = CityBuilder.getInstance();
+
+        this.cityRenderer = new CityRenderer(cityBuilder.TILE_WIDTH, cityBuilder.TILE_HEIGHT);
     }
 
     @Override
@@ -32,7 +43,11 @@ public class CommandPurchaseTile extends CityCommand {
                     userCity.setTile(column, row, purchasedTile, database);
                     userCity.modifyFunds(-price);
 
-                    this.reply(message, "You've purchased 1 **" + purchasedTile.name() + "** for your city at column " + (column + 1) + " row " + (row + 1) + "! Type **" + this.getPrefix() + "city** to view your city\n\nCost: **$" + price + "**\nRemaining funds: " + userCity.getFunds());
+                    userCity.updateCityForTime(0, database);
+                    File cityImage = this.cityRenderer.render(userCity);
+
+                    Message purchaseMessage = new MessageBuilder().append("You paid **$" + price + "** for one **" + purchasedTile.name().toLowerCase() + "**!").build();
+                    message.getTextChannel().sendFile(cityImage, purchaseMessage).queue();
                 } else {
                     this.reply(message, "Insufficient funds! You currently have $" + userCity.getFunds() + ", while that tile costs $" + price + ". Your city will generate funds over time: Check on your city again soon!");
                 }
@@ -44,6 +59,8 @@ public class CommandPurchaseTile extends CityCommand {
             sqlException.printStackTrace();
         } catch(NumberFormatException invalidPosition) {
             this.reply(message, "Please specify a valid position for your tile! Example: **" + this.getPrefix() + arguments[0] + " 3 6 to purchase a tile at column 3, row 6");
+        } catch(IOException renderException) {
+            this.reply(message, "Failed to render your city");
         }
     }
 

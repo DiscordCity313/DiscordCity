@@ -27,8 +27,9 @@ public class CityRenderer {
     private HashMap<CityTileType, Image> spriteCache = new HashMap<CityTileType, Image>();
 
     private Image uiSprite;
+    private Image headerSprite;
 
-    public CityRenderer(int mapGridWidth, int mapGridHeight, int tileWidth, int tileHeight) throws IOException {
+    public CityRenderer(int tileWidth, int tileHeight) throws IOException {
         this.displayWidth = 240;
         this.displayHeight = 240;
         this.tileWidth = tileWidth;
@@ -37,6 +38,7 @@ public class CityRenderer {
         this.setupSpriteCache();
 
         this.uiSprite = ImageIO.read(new File(this.CACHE_PATH + "/background.png"));
+        this.headerSprite = ImageIO.read(new File(this.CACHE_PATH + "/header.png"));
     }
 
     public File render(City city) throws IOException {
@@ -69,6 +71,7 @@ public class CityRenderer {
 
     private void renderStats(City city) {
         this.graphics.drawImage(this.uiSprite, 0, 0, null);
+        this.graphics.drawImage(this.headerSprite, 0, 0, null);
 
         int offsetX = this.tileWidth * 3 + this.tileWidth / 2;
 
@@ -80,7 +83,7 @@ public class CityRenderer {
 
     private void renderTilemap(City city) {
         int offsetX = this.uiSprite.getHeight(null) / 2 - (city.getTileGridWidth() * this.tileWidth / 2);
-        int offsetY = this.uiSprite.getHeight(null) / 3;
+        int offsetY = this.uiSprite.getHeight(null) / 3 + this.tileWidth / 2;
 
         for(int row = 0; row < city.getTileGridHeight(); row++) {
             int renderRow = row + 1;

@@ -19,21 +19,13 @@ public class CommandViewCity extends CityCommand {
         super(new String [] {"city", "view", "viewcity", "mycity"}, "Displays your city");
         CityBuilder cityBuilder = CityBuilder.getInstance();
 
-        int mapGridWidth = cityBuilder.TILE_GRID_WIDTH;
-        int mapGridHeight = cityBuilder.TILE_GRID_HEIGHT;
-
-        int tileWidth = cityBuilder.TILE_WIDTH;
-        int tileHeight = cityBuilder.TILE_HEIGHT;
-
-        this.cityRenderer = new CityRenderer(mapGridWidth, mapGridHeight, tileWidth, tileHeight);
+        this.cityRenderer = new CityRenderer(cityBuilder.TILE_WIDTH, cityBuilder.TILE_HEIGHT);
     }
 
     @Override
     public void use(Message message, String[] arguments, MySql database) {
         try {
-            String userId = message.getAuthor().getId();
-
-            City userCity = this.getCityForUser(userId, database);
+            City userCity = this.getCityForUser(message.getAuthor().getId(), database);
 
             File cityImage = this.cityRenderer.render(userCity);
 

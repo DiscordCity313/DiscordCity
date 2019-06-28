@@ -14,7 +14,7 @@ public class CityBuilder {
 
     private static final CityBuilder INSTANCE = new CityBuilder();
 
-    private final int INITIAL_FUNDS = 500;
+    private final int INITIAL_FUNDS = 1500;
 
     private final int INITAL_MAX_DENSITY = 20;
 
