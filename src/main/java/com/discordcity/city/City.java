@@ -58,7 +58,6 @@ public class City {
     }
 
     public void updateCityForTime(int secondsSinceLastUpdate, Sqlite database) throws SQLException {
-        System.out.println("Seconds since last update: " + secondsSinceLastUpdate);
         for(CityTileType cityTileType : this.tiles) {
 
             boolean validTileUpdate = cityTileType.CITY_TILE.updateForTime(secondsSinceLastUpdate, this);
