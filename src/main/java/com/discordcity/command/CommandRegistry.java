@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
 
@@ -34,7 +34,7 @@ public class CommandRegistry {
         this.registeredCommands.add(command);
     }
 
-    public void callMatchingCommandForQuery(String prefix, Message query, MySql database) {
+    public void callMatchingCommandForQuery(String prefix, Message query, Sqlite database) {
         String queryContent = query.getContentRaw();
 
         if(queryContent.startsWith(prefix)) {
@@ -53,7 +53,7 @@ public class CommandRegistry {
         }
     }
 
-    public void useReaction(GenericGuildMessageReactionEvent event, MySql database) {
+    public void useReaction(GenericGuildMessageReactionEvent event, Sqlite database) {
         for(Command command : this.registeredCommands) {
             command.useReaction(event, database);
         }

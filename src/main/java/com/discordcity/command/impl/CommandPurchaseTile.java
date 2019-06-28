@@ -5,11 +5,9 @@ import com.discordcity.city.CityBuilder;
 import com.discordcity.city.render.CityRenderer;
 import com.discordcity.city.tile.CityTileType;
 import com.discordcity.command.CityCommand;
-import com.discordcity.database.MySql;
-import net.dv8tion.jda.core.MessageBuilder;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.entities.Message;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -28,7 +26,7 @@ public class CommandPurchaseTile extends CityCommand {
     }
 
     @Override
-    public void use(Message message, String[] arguments, MySql database) {
+    public void use(Message message, String[] arguments, Sqlite database) {
         String userId = message.getAuthor().getId();
 
         try {

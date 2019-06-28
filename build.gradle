@@ -29,6 +29,12 @@ task copyAssets(type: Copy) {
     include "*.png"
 }
 
+task copyDatabase(type: Copy) {
+    from 'discordcity.db'
+    into 'build/libs'
+    include '*.db'
+}
+
 repositories {
     mavenCentral()
     jcenter()
@@ -42,8 +48,9 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20180813'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.21'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.28.0'
 }
 
 fullBuild.dependsOn copyConfig
 fullBuild.dependsOn copyAssets
+fullBuild.dependsOn copyDatabase

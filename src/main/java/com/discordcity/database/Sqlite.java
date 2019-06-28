@@ -5,14 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class MySql {
+public class Sqlite {
 
     private Connection connection;
 
-    public MySql(String driver, String connection) throws SQLException, ClassNotFoundException {
-        Class.forName(driver);
-
-        this.connection = DriverManager.getConnection(connection);
+    public Sqlite() throws SQLException, ClassNotFoundException {
+        this.connection = DriverManager.getConnection("jdbc:sqlite:./discordcity.db");
     }
 
     public PreparedStatement getStatement(String sql) throws SQLException {

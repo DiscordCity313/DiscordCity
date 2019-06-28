@@ -1,14 +1,12 @@
 package com.discordcity.city;
 
-import com.discordcity.city.tile.CityTile;
 import com.discordcity.city.tile.CityTileType;
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import com.discordcity.util.TimeUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class CityBuilder {
 
@@ -28,7 +26,7 @@ public class CityBuilder {
 
     public final int DAMAGING_UNEMPLOYMENT_RATE = 30;
 
-    public City getCityForUser(String ownerUserId, MySql database) throws SQLException {
+    public City getCityForUser(String ownerUserId, Sqlite database) throws SQLException {
         if(this.cityExists(ownerUserId, database)) {
             return this.buildExistingCity(ownerUserId, database);
         } else {
@@ -36,7 +34,7 @@ public class CityBuilder {
         }
     }
 
-    public City buildExistingCity(String ownerUserId, MySql database) throws SQLException {
+    public City buildExistingCity(String ownerUserId, Sqlite database) throws SQLException {
         PreparedStatement cityPropertiesQuery = database.getStatement("SELECT * FROM CityProperties WHERE ownerUserId = ?");
         cityPropertiesQuery.setString(1, ownerUserId);
 
@@ -60,7 +58,7 @@ public class CityBuilder {
         return builtCity;
     }
 
-    public City buildNewCity(String ownerUserId, MySql database) throws SQLException {
+    public City buildNewCity(String ownerUserId, Sqlite database) throws SQLException {
         PreparedStatement createCityProperties = database.getStatement("INSERT INTO CityProperties (ownerUserId, population, funds, maxDensity, lastUpdated) VALUES (?, ?, ?, ?, ?)");
         createCityProperties.setString(1, ownerUserId);
         createCityProperties.setInt(2, 0);
@@ -83,7 +81,7 @@ public class CityBuilder {
         return builtCity;
     }
 
-    public City resetCity(String ownerUserId, MySql database) throws SQLException {
+    public City resetCity(String ownerUserId, Sqlite database) throws SQLException {
         PreparedStatement resetPropertiesStatement = database.getStatement("DELETE FROM CityProperties WHERE ownerUserId = ?");
         resetPropertiesStatement.setString(1, ownerUserId);
 
@@ -97,7 +95,7 @@ public class CityBuilder {
         return this.buildNewCity(ownerUserId, database);
     }
 
-    public boolean cityExists(String ownerUserId, MySql database) throws SQLException {
+    public boolean cityExists(String ownerUserId, Sqlite database) throws SQLException {
         PreparedStatement cityExistsQuery = database.getStatement("SELECT ownerUserId FROM CityProperties WHERE ownerUserId = ?");
         cityExistsQuery.setString(1, ownerUserId);
 

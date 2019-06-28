@@ -1,6 +1,6 @@
 package com.discordcity.command;
 
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -13,9 +13,9 @@ public class CommandListener extends ListenerAdapter {
 
     private String prefix;
 
-    private MySql database;
+    private Sqlite database;
 
-    public CommandListener(String prefix, MySql database) throws IOException {
+    public CommandListener(String prefix, Sqlite database) throws IOException {
         this.commandRegistry = new CommandRegistry(prefix);
         this.prefix = prefix;
         this.database = database;

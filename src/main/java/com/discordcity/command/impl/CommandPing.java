@@ -1,7 +1,7 @@
 package com.discordcity.command.impl;
 
 import com.discordcity.command.Command;
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.entities.Message;
 
 public class CommandPing extends Command {
@@ -12,7 +12,7 @@ public class CommandPing extends Command {
     }
 
     @Override
-    public void use(Message message, String[] arguments, MySql database) {
+    public void use(Message message, String[] arguments, Sqlite database) {
         this.reply(message, "Pong!");
     }
 

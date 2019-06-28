@@ -2,7 +2,7 @@ package com.discordcity.command.impl;
 
 import com.discordcity.command.Command;
 import com.discordcity.command.CommandRegistry;
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 
@@ -17,7 +17,7 @@ public class CommandHelp extends Command {
     }
 
     @Override
-    public void use(Message message, String[] arguments, MySql database) {
+    public void use(Message message, String[] arguments, Sqlite database) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
 
         String welcomeMessage = ("Welcome to Discord City! Your goal is to build and grow your own little city on Discord.");

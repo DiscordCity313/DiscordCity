@@ -4,8 +4,7 @@ import com.discordcity.city.City;
 import com.discordcity.city.CityBuilder;
 import com.discordcity.city.CityCache;
 import com.discordcity.command.CityCommand;
-import com.discordcity.command.Command;
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.entities.Message;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class CommandReset extends CityCommand {
     }
 
     @Override
-    public void use(Message message, String[] arguments, MySql database) {
+    public void use(Message message, String[] arguments, Sqlite database) {
         try {
             if (arguments[0].equalsIgnoreCase("confirm")) {
                 City newCity = CityBuilder.getInstance().resetCity(message.getAuthor().getId(), database);

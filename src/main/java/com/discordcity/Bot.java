@@ -1,7 +1,7 @@
 package com.discordcity;
 
 import com.discordcity.command.CommandListener;
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
@@ -15,7 +15,7 @@ public class Bot {
 
     private JDA jda;
 
-    private MySql database;
+    private Sqlite database;
 
     public Bot(JSONObject config, String game) throws LoginException, SQLException, ClassNotFoundException {
         try {
@@ -28,15 +28,7 @@ public class Bot {
     }
 
     private void setupDatabase(JSONObject config) throws SQLException, ClassNotFoundException {
-        String databaseHost = config.getString("DB_HOST");
-        String databaseName = config.getString("DB_NAME");
-        String databasePassword = config.getString("DB_PASSWORD");
-        String databaseUser = config.getString("DB_USER");
-
-        String databaseDriver = ("com.mysql.jdbc.Driver");
-        String databaseConnection = ("jdbc:mysql://" + databaseHost + "/" + databaseName + "?autoReconnect=true&user=" + databaseUser + "&password=" + databasePassword);
-
-        this.database = new MySql(databaseDriver, databaseConnection);
+        this.database = new Sqlite();
     }
 
     private void setupCommandListener(JSONObject config) throws IOException {

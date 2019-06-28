@@ -1,6 +1,6 @@
 package com.discordcity.command;
 
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
@@ -39,9 +39,9 @@ public abstract class Command {
         this.description = description;
     }
 
-    public abstract void use(Message message, String[] arguments, MySql database);
+    public abstract void use(Message message, String[] arguments, Sqlite database);
 
-    public void useReaction(GenericGuildMessageReactionEvent event, MySql database) {
+    public void useReaction(GenericGuildMessageReactionEvent event, Sqlite database) {
 
     }
 

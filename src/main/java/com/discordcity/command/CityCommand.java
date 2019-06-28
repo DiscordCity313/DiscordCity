@@ -4,8 +4,7 @@ import com.discordcity.city.City;
 import com.discordcity.city.CityBuilder;
 import com.discordcity.city.CityCache;
 import com.discordcity.city.render.CityRenderer;
-import com.discordcity.database.MySql;
-import net.dv8tion.jda.core.EmbedBuilder;
+import com.discordcity.database.Sqlite;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -40,7 +39,7 @@ public abstract class CityCommand extends Command {
         this.cityRenderer = new CityRenderer(cityBuilder.TILE_WIDTH, cityBuilder.TILE_HEIGHT);
     }
 
-    public City getCityForUser(String userId, MySql database) throws SQLException {
+    public City getCityForUser(String userId, Sqlite database) throws SQLException {
         CityCache cityCache = CityCache.getInstance();
 
         City userCity = null;
@@ -69,7 +68,7 @@ public abstract class CityCommand extends Command {
     }
 
     @Override
-    public void useReaction(GenericGuildMessageReactionEvent event, MySql database) {
+    public void useReaction(GenericGuildMessageReactionEvent event, Sqlite database) {
         super.useReaction(event, database);
         if(!event.getMember().getUser().isBot()) {
             City messageCity = this.getParentCityForMessage(event.getMessageId());
@@ -80,7 +79,7 @@ public abstract class CityCommand extends Command {
         }
     }
 
-    public void sendCityDisplayMessage(String extraMessageContent, TextChannel textChannel, String authorId, MySql database) {
+    public void sendCityDisplayMessage(String extraMessageContent, TextChannel textChannel, String authorId, Sqlite database) {
         try {
             City userCity = this.getCityForUser(authorId, database);
 

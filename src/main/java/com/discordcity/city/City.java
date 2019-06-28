@@ -1,7 +1,7 @@
 package com.discordcity.city;
 
 import com.discordcity.city.tile.CityTileType;
-import com.discordcity.database.MySql;
+import com.discordcity.database.Sqlite;
 import com.discordcity.util.TimeUtil;
 
 import java.sql.PreparedStatement;
@@ -57,7 +57,7 @@ public class City {
         }
     }
 
-    public void updateCityForTime(int secondsSinceLastUpdate, MySql database) throws SQLException {
+    public void updateCityForTime(int secondsSinceLastUpdate, Sqlite database) throws SQLException {
         System.out.println("Seconds since last update: " + secondsSinceLastUpdate);
         for(CityTileType cityTileType : this.tiles) {
 
@@ -84,7 +84,7 @@ public class City {
         }
     }
 
-    public void setTile(int column, int row, CityTileType cityTileType, MySql database) throws SQLException {
+    public void setTile(int column, int row, CityTileType cityTileType, Sqlite database) throws SQLException {
         int tileIndex = (row * this.tileGridWidth + column);
 
         this.tiles[tileIndex] = cityTileType;
@@ -96,7 +96,7 @@ public class City {
         this.funds += modification;
     }
 
-    private void writeTilemapToDatabase(MySql database) throws SQLException {
+    private void writeTilemapToDatabase(Sqlite database) throws SQLException {
         String tilemapData = new CityBuilder().tilesToString(this.tiles);
 
         PreparedStatement updateTilemap = database.getStatement("UPDATE CityTiles SET tiles = ? WHERE ownerUserId = ?");
@@ -150,7 +150,7 @@ public class City {
         }
     }
 
-    public Timestamp getLastUpdated(MySql database) throws SQLException {
+    public Timestamp getLastUpdated(Sqlite database) throws SQLException {
         PreparedStatement lastUpdatedQuery = database.getStatement("SELECT lastUpdated FROM CityProperties WHERE ownerUserId = ?");
         lastUpdatedQuery.setString(1, this.ownerUserId);
 
@@ -160,14 +160,14 @@ public class City {
         return lastUpdatedResult.getTimestamp("lastUpdated");
     }
 
-    public void updateDatabaseProperties(MySql database) throws SQLException {
+    public void updateDatabaseProperties(Sqlite database) throws SQLException {
         this.updateDatabaseTime(database);
         this.updateDatabasePopulation(database);
         this.updateDatabaseFunds(database);
         this.updateDatabaseMaxDensity(database);
     }
 
-    public void updateDatabaseTime(MySql database) throws SQLException {
+    public void updateDatabaseTime(Sqlite database) throws SQLException {
         Timestamp currentTime = TimeUtil.getInstance().getCurrentTime();
 
         PreparedStatement updateTime = database.getStatement("UPDATE CityProperties SET lastUpdated = ? WHERE ownerUserId = ?");
@@ -177,7 +177,7 @@ public class City {
         updateTime.execute();
     }
 
-    public void updateDatabasePopulation(MySql database) throws SQLException {
+    public void updateDatabasePopulation(Sqlite database) throws SQLException {
         PreparedStatement updatePopulation = database.getStatement("UPDATE CityProperties SET population = ? WHERE ownerUserId = ?");
         updatePopulation.setInt(1, this.population);
         updatePopulation.setString(2, this.ownerUserId);
@@ -185,7 +185,7 @@ public class City {
         updatePopulation.execute();
     }
 
-    public void updateDatabaseFunds(MySql database) throws SQLException {
+    public void updateDatabaseFunds(Sqlite database) throws SQLException {
         PreparedStatement updateFunds = database.getStatement("UPDATE CityProperties SET funds = ? WHERE ownerUserId = ?");
         updateFunds.setString(1, "" + this.funds);
         updateFunds.setString(2, this.ownerUserId);
@@ -193,7 +193,7 @@ public class City {
         updateFunds.execute();
     }
 
-    public void updateDatabaseMaxDensity(MySql database) throws SQLException {
+    public void updateDatabaseMaxDensity(Sqlite database) throws SQLException {
         PreparedStatement updateMaxDensity = database.getStatement("UPDATE CityProperties SET maxDensity = ? WHERE ownerUserId = ?");
         updateMaxDensity.setInt(1, this.maxDensity);
         updateMaxDensity.setString(2, this.ownerUserId);
@@ -201,7 +201,7 @@ public class City {
         updateMaxDensity.execute();
     }
 
-    public int getSecondsSinceLastUpdate(MySql database) throws SQLException {
+    public int getSecondsSinceLastUpdate(Sqlite database) throws SQLException {
         Timestamp lastUpdatedTime = this.getLastUpdated(database);
         Timestamp currentTime = TimeUtil.getInstance().getCurrentTime();
 
