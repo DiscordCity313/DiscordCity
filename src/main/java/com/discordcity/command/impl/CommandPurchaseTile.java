@@ -47,10 +47,8 @@ public class CommandPurchaseTile extends CityCommand {
                     userCity.modifyFunds(-price);
 
                     userCity.updateCityForTime(0, database);
-                    File cityImage = this.cityRenderer.render(userCity);
 
-                    Message purchaseMessage = new MessageBuilder().append("You paid **$" + price + "** for one **" + purchasedTile.name().toLowerCase() + "**!").build();
-                    message.getTextChannel().sendFile(cityImage, purchaseMessage).queue();
+                    this.sendCityDisplayMessage("You paid **$" + price + "** for one **" + purchasedTile.name().toLowerCase() + "**!", message.getTextChannel(), message.getAuthor().getId(), database);
                 } else {
                     this.reply(message, "Insufficient funds! You currently have $" + userCity.getFunds() + ", while that tile costs $" + price + ". Your city will generate funds over time: Check on your city again soon!");
                 }
@@ -62,8 +60,6 @@ public class CommandPurchaseTile extends CityCommand {
             sqlException.printStackTrace();
         } catch(NumberFormatException invalidPosition) {
             this.reply(message, "Please specify a valid position for your tile! Example: **" + this.getPrefix() + arguments[0] + " 3 6 to purchase a tile at column 3, row 6");
-        } catch(IOException renderException) {
-            this.reply(message, "Failed to render your city");
         }
     }
 

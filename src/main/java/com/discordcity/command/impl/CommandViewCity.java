@@ -24,18 +24,7 @@ public class CommandViewCity extends CityCommand {
 
     @Override
     public void use(Message message, String[] arguments, MySql database) {
-        try {
-            City userCity = this.getCityForUser(message.getAuthor().getId(), database);
-
-            File cityImage = this.cityRenderer.render(userCity);
-
-            message.getTextChannel().sendFile(cityImage).queue();
-        } catch(SQLException sqlException) {
-            this.replyError(message, "There was an issue retrieving your city information");
-            sqlException.printStackTrace();
-        } catch(IOException renderException) {
-            this.replyError(message, "There was an issue rendering your city");
-        }
+        this.sendCityDisplayMessage("", message.getTextChannel(), message.getAuthor().getId(), database);
     }
 
 }

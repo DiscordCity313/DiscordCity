@@ -6,8 +6,8 @@ import com.discordcity.city.tile.CityTile;
 public class CityTileIndustry extends CityTile {
 
     @Override
-    public void updateForTime(int secondsSinceLastUpdate, City parentCity) {
-
+    public boolean updateForTime(int secondsSinceLastUpdate, City parentCity) {
+        return true;
     }
 
 }

@@ -2,6 +2,8 @@ package com.discordcity.command;
 
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
 
 public abstract class Command {
 
@@ -39,12 +41,20 @@ public abstract class Command {
 
     public abstract void use(Message message, String[] arguments, MySql database);
 
+    public void useReaction(GenericGuildMessageReactionEvent event, MySql database) {
+
+    }
+
     public void reply(Message message, String response) {
         message.getTextChannel().sendMessage(response).queue();
     }
 
     public void replyError(Message message, String response) {
-        message.getTextChannel().sendMessage(response + "\n" + this.ERROR_MESSAGE).queue();
+        this.replyError(message.getTextChannel(), response);
+    }
+
+    public void replyError(TextChannel textChannel, String response) {
+        textChannel.sendMessage(response + "\n" + this.ERROR_MESSAGE).queue();
     }
 
     public boolean identifierMatches(String identifier) {

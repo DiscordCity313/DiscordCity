@@ -27,12 +27,20 @@ public abstract class CityTile {
         return this.lastValidTileUpdate;
     }
 
-    public int getSecondsSinceLastValidTileUpdate() {
+    public int getSecondsSinceLastValidTileUpdate(int secondsSinceLastCityUpdate) {
         Timestamp currentTime = TimeUtil.getInstance().getCurrentTime();
 
         long differenceMillis = currentTime.getTime() - this.getLastValidTileUpdate().getTime();
 
-        return (int) differenceMillis / 1000;
+        int secondsSinceLastValidTileUpdate = (int) differenceMillis / 1000;
+
+        int cityUpdateOverlap = secondsSinceLastCityUpdate - secondsSinceLastValidTileUpdate;
+
+        if(cityUpdateOverlap > 0) {
+            secondsSinceLastValidTileUpdate += cityUpdateOverlap;
+        }
+
+        return secondsSinceLastValidTileUpdate;
     }
 
 }

@@ -11,6 +11,7 @@ import com.discordcity.command.impl.CommandPurchaseTile;
 import com.discordcity.command.impl.CommandViewCity;
 import com.discordcity.database.MySql;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
 
 public class CommandRegistry {
 
@@ -50,6 +51,12 @@ public class CommandRegistry {
             }
         }
 
+    }
+
+    public void useReaction(GenericGuildMessageReactionEvent event, MySql database) {
+        for(Command command : this.registeredCommands) {
+            command.useReaction(event, database);
+        }
     }
 
     public List<Command> getRegisteredCommands() {

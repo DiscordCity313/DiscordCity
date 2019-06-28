@@ -20,7 +20,6 @@ public class Bot {
     public Bot(JSONObject config, String game) throws LoginException, SQLException, ClassNotFoundException {
         try {
             this.jda = new JDABuilder(config.getString("BOT_TOKEN")).setGame(Game.of(Game.GameType.DEFAULT, game)).build();
-
             this.setupDatabase(config);
             this.setupCommandListener(config);
         } catch(IOException assetLoadException) {

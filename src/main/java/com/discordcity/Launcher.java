@@ -16,7 +16,9 @@ public class Launcher {
             File configFile = new File("./config.json");
             JSONObject config = new JSONObject(FileUtils.readFileToString(configFile, Charset.defaultCharset()));
 
-            Bot discordCityBot = new Bot(config, "Build your city!");
+            String helpStatusInformation = (config.getString("BOT_PREFIX") + "help");
+
+            Bot discordCityBot = new Bot(config, "Build your city! " + helpStatusInformation);
         } catch(IOException | LoginException | SQLException | ClassNotFoundException initializationException) {
             initializationException.printStackTrace();
         }
