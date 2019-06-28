@@ -53,14 +53,19 @@ public class CommandPurchaseTile extends CityCommand {
                     this.reply(message, "Insufficient funds! You currently have $" + userCity.getFunds() + ", while that tile costs $" + price + ". Your city will generate funds over time: Check on your city again soon!");
                 }
             } else {
-                this.reply(message, "Invalid tile name! Available options: " + CityTileType.getHumanTilesDisplay());
+                this.reply(message, "Invalid tile name! Available options: " + this.getOptionsDisplay());
             }
         } catch(SQLException sqlException) {
             this.replyError(message, "Failed to fetch or write city information");
             sqlException.printStackTrace();
-        } catch(NumberFormatException invalidPosition) {
-            this.reply(message, "Please specify a valid position for your tile! Example: **" + this.getPrefix() + arguments[0] + " 3 6 to purchase a tile at column 3, row 6");
+        } catch(NumberFormatException | ArrayIndexOutOfBoundsException invalidPosition) {
+            this.reply(message, "Please specify a valid position for your tile!" + "\n\nExample Usage:\n" + this.getExampleUsage());
         }
+
+    }
+
+    private String getOptionsDisplay() {
+        return CityTileType.getHumanTilesDisplay() + "\n\nExample Usage:\n" + this.getExampleUsage();
     }
 
 }

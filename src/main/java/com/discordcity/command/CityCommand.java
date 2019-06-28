@@ -5,6 +5,7 @@ import com.discordcity.city.CityBuilder;
 import com.discordcity.city.CityCache;
 import com.discordcity.city.render.CityRenderer;
 import com.discordcity.database.MySql;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -83,7 +84,7 @@ public abstract class CityCommand extends Command {
         try {
             City userCity = this.getCityForUser(authorId, database);
 
-            File cityImage = this.cityRenderer.render(userCity);
+            File cityImage = this.cityRenderer.render(userCity, textChannel.getJDA().getUserById(authorId));
 
             Message cityMessage = null;
 
@@ -100,6 +101,7 @@ public abstract class CityCommand extends Command {
             sqlException.printStackTrace();
         } catch(IOException renderException) {
             this.replyError(textChannel, "There was an issue rendering your city");
+            renderException.printStackTrace();
         }
     }
 

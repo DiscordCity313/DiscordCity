@@ -2,12 +2,14 @@ package com.discordcity.city.render;
 
 import com.discordcity.city.City;
 import com.discordcity.city.tile.CityTileType;
+import net.dv8tion.jda.core.entities.User;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
 public class CityRenderer {
@@ -41,10 +43,10 @@ public class CityRenderer {
         this.headerSprite = ImageIO.read(new File(this.CACHE_PATH + "/header.png"));
     }
 
-    public File render(City city) throws IOException {
+    public File render(City city, User user) throws IOException {
         this.setupDisplay();
 
-        this.renderStats(city);
+        this.renderStats(city, user);
 
         this.renderTilemap(city);
 
@@ -69,15 +71,18 @@ public class CityRenderer {
         this.graphics = this.displayImage.createGraphics();
     }
 
-    private void renderStats(City city) {
+    private void renderStats(City city, User user) {
         this.graphics.drawImage(this.uiSprite, 0, 0, null);
         this.graphics.drawImage(this.headerSprite, 0, 0, null);
 
         int offsetX = this.tileWidth * 3 + this.tileWidth / 2;
 
-        this.graphics.drawString("Population: " + city.getPopulation() + "/" + city.getMaxPopulation(), offsetX, 22);
-        this.graphics.drawString("Funds: $" + city.getFunds(), offsetX, 38);
-        this.graphics.drawString("Unemployment: " + city.getUnemployment()  + "%", offsetX, 54);
+        this.graphics.setColor(Color.YELLOW);
+        this.graphics.drawString(user.getName() + "'s City", offsetX, 16);
+        this.graphics.setColor(Color.WHITE);
+        this.graphics.drawString("Population: " + city.getPopulation() + "/" + city.getMaxPopulation(), offsetX, 32);
+        this.graphics.drawString("Funds: $" + city.getFunds(), offsetX, 48);
+        this.graphics.drawString("Unemployment: " + city.getUnemployment()  + "%", offsetX, 64);
     }
 
     private void renderTilemap(City city) {

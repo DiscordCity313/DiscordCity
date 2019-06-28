@@ -58,12 +58,14 @@ public enum CityTileType {
         for(int cityTileTypeIndex = 0; cityTileTypeIndex < CityTileType.values().length; cityTileTypeIndex++) {
             CityTileType cityTileType = CityTileType.values()[cityTileTypeIndex];
 
-            humanTilesDisplay += (cityTileType.name() + " (or " + cityTileType.SYMBOL + ")");
+            if(!(cityTileType == CityTileType.Ground)) {
+                humanTilesDisplay += (cityTileType.name() + " (or " + cityTileType.SYMBOL + ")");
 
-            boolean finalValue = (cityTileTypeIndex == CityTileType.values().length  - 1);
+                boolean finalValue = (cityTileTypeIndex == CityTileType.values().length - 1);
 
-            if(!finalValue) {
-                humanTilesDisplay += (", ");
+                if (!finalValue) {
+                    humanTilesDisplay += (", ");
+                }
             }
         }
 
