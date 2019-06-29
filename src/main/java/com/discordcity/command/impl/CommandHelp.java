@@ -28,9 +28,10 @@ public class CommandHelp extends Command {
 
         String gameDescription = ("Once you've placed at least one house, people will begin moving in over time.");
         gameDescription += (" The more people you have, the more tax revenue is collected.");
-        gameDescription += (" If unemployment goes above 30%, people will stop moving in.");
-        gameDescription += (" To lower unemployment, build some industry and provide jobs for your people!");
-        gameDescription += ("\n\nTo check in on your city's progress, type " + this.getPrefix() + "city");
+        gameDescription += (" **If unemployment goes above 30%, people will stop moving in.");
+        gameDescription += (" To lower unemployment, build some industry and provide jobs for your people!**");
+        gameDescription += ("\n\nTo check in on your city's progress, type " + this.getPrefix() + "city.");
+        gameDescription += ("\n**Clicking the ⏭ reaction after viewing your city will resend the city display message with your city's latest progress**");
 
         embedBuilder.addField("How to Play", gameDescription, false);
 
@@ -43,10 +44,10 @@ public class CommandHelp extends Command {
         for(Command command : this.commandRegistry.getRegisteredCommands()) {
             if(!command.isUnlisted()) {
                 String identifierFull = (this.getPrefix() + command.getPrimaryIdentifier());
-                commandsText += ("\n" + identifierFull + " " + command.getArguments() + "\n - " + command.getDescription() + "\n");
+                commandsText += ("\n**" + identifierFull + "** " + command.getArguments() + "\n - " + command.getDescription() + "\n");
 
                 if(command.hasExampleUsage()) {
-                    commandsText += ("\n- Example usage:\n" + command.getExampleUsage() + "\n");
+                    commandsText += ("\n**- Example usage:**\n" + command.getExampleUsage() + "\n");
                 }
             }
         }

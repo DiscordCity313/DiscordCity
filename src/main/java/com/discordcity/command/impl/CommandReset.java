@@ -14,7 +14,6 @@ public class CommandReset extends CityCommand {
 
     public CommandReset() throws IOException {
         super(new String[] {"reset"}, "Resets your city");
-        this.setUnlisted(true);
     }
 
     @Override

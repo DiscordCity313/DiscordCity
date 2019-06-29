@@ -16,9 +16,10 @@ public class CommandPurchaseTile extends CityCommand {
     private CityRenderer cityRenderer;
 
     public CommandPurchaseTile(String prefix) throws IOException {
-        super(new String[] {"buy", "purchase", "tile"}, "<building name> <column> <row> ", "Buy and place a building for your city");
+        super(new String[] {"buy", "purchase", "tile"}, "<building> <column> <row> ", "Buy and place a building for your city");
         this.setExampleUsage(prefix + "buy house 2 5 - (Place a house at column 2, row 5)");
         this.setExampleUsage(this.getExampleUsage() + "\n" + prefix + "buy industry 3 7 - (Place industry at column 3, row 7)");
+        this.setExampleUsage(this.getExampleUsage() + "\n\n" + "_Letters (h, i) can be used in place of building names_");
 
         CityBuilder cityBuilder = CityBuilder.getInstance();
 
